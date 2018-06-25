@@ -1,20 +1,29 @@
 
 # coding: utf-8
 
-# In[71]:
+# In[ ]:
 
 
 import requests
 import json
 import random
+from time import sleep
+from datetime import datetime
 
 
-# In[102]:
+# In[ ]:
 
 
 class Faker:
     def __init__(self):
         self.headers = {'Content-type': 'application/json; charset=utf-8'}
+        self.location_id = 0
+        self.min_temp = 10
+        self.max_temp = 30
+        self.min_speed = 10
+        self.max_speed = 60
+        self.all_location_ids = []
+        self.delay = 1
         print "init"
         
     def create_location(self,data):
@@ -33,6 +42,8 @@ class Faker:
                 if not self.has_location(location['name']):
                     headers = {'Content-type': 'application/json; charset=utf-8'}
                     response = requests.post('http://localhost:8080/v1.0/Locations',headers=headers,json=location)
+                    self.location_id = response.json()['@iot.id']
+                    self.all_location_ids.append(self.location_id)
                     
         print "creating locations finished"
                     
@@ -51,6 +62,9 @@ class Faker:
         thing = {
           "name": "Vehicle " + self.random_string(),
           "description": "Local shuttle",
+          "Locations": [
+            {"@iot.id":self.location_id}
+          ]
         }
         
         return requests.post('http://localhost:8080/v1.0/Things',headers=self.headers,json=thing)
@@ -74,10 +88,30 @@ class Faker:
     def random_string(self):
         return ('%06x' % random.randrange(16**6)).upper()
     
+    def create_observation(self,datastream_id,result):
+        timestamp = datetime.now().isoformat()[:-3] + 'Z'
+        observation = {
+          "phenomenonTime": timestamp,
+          "resultTime" : timestamp,
+          "result" : result,
+          "Datastream":{"@iot.id":datastream_id}
+        }
+        return requests.post('http://localhost:8080/v1.0/Observations',headers=self.headers,json=observation) 
+    
+    def update_thing(self,thing_id,location_id):
+        thing = {
+          "Locations": [
+            {"@iot.id":location_id}
+          ]
+        }
+        return requests.patch('http://localhost:8080/v1.0/Things('+str(thing_id)+')',headers=self.headers,json=thing) 
+            
+    
     def seed_observations(self):
         
         # create a thing
-        thing_id = self.create_thing().json()['@iot.id']
+        thing =  self.create_thing()
+        thing_id = thing.json()['@iot.id'] 
         
         # create a temperature sensor
         temperature_sensor = {
@@ -106,7 +140,7 @@ class Faker:
           "Sensor":{"@iot.id":temperature_sensor_id}
         }
         
-        print self.create_datastream(temperature_datastream).json()
+        temperature_datastream_id = self.create_datastream(temperature_datastream).json()['@iot.id']
         
         # create a Speedometer sensor
         speed_sensor = {
@@ -135,19 +169,43 @@ class Faker:
           "Sensor":{"@iot.id":speed_sensor_id}
         }
         
-        print self.create_datastream(speed_datastream).json()
+        speedometer_datastream_id = self.create_datastream(speed_datastream).json()['@iot.id']
         
+        sensor_flag = True
+        location_count = len(self.all_location_ids)
+        forward_direction = True
+        current_location = 0
         
+        while True:
+            if sensor_flag is True:
+                temperature_value = round(random.uniform(self.min_temp,self.max_temp),2)
+                self.create_observation(temperature_datastream_id,temperature_value)
+                sensor_flag = False
+            else:
+                speed_value = random.randint(self.min_speed,self.max_speed)
+                self.create_observation(speedometer_datastream_id,speed_value)
+                sensor_flag = True
+                
+            if forward_direction is True:
+                self.update_thing(thing_id,self.all_location_ids[current_location])
+                current_location += 1
+                if current_location == location_count:
+                    forward_direction = False
+                    current_location -= 2
+            else:
+                self.update_thing(thing_id,self.all_location_ids[current_location])
+                current_location -= 1
+                if current_location == -1:
+                    forward_direction = True
+                    current_location += 2
+            sleep(self.delay)
         
 
 
-# In[103]:
+# In[ ]:
 
 
 faker = Faker()
 faker.create_locations()
 faker.seed_observations()
-# faker.create_thing().json()['@iot.id']
-# faker.create_sensor()
-# faker.run_seeder()
 
