@@ -95,7 +95,7 @@ class Faker:
         return ('%06x' % random.randrange(16**6)).upper()
 
     def create_observation(self,datastream_id,result):
-        timestamp = datetime.now().isoformat()[:-3] + 'Z'
+        timestamp = datetime.utcnow().isoformat()[:-3] + 'Z'
         observation = {
           "phenomenonTime": timestamp,
           "resultTime" : timestamp,
