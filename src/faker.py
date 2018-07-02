@@ -9,7 +9,8 @@ import json
 import random
 from time import sleep
 from datetime import datetime
-
+import socket
+import time
 
 # In[ ]:
 
@@ -213,6 +214,16 @@ class Faker:
             sleep(self.delay)
 # In[ ]:
 
+# Infinite loop
+while True:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(("gost-db", 5432))
+    if result == 0:
+        print("gost-db port is open! Bye!")
+        break
+    else:
+        print("gost-db port is not open! I'll check it soon!")
+        time.sleep(3)
 
 faker = Faker()
 faker.create_locations()

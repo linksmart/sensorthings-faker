@@ -6,6 +6,8 @@ services:
             POSTGRES_DB: gost
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
+        ports:
+            - "5432:5432"
     gost:
         image: geodan/gost:0.5
         depends_on:
@@ -28,6 +30,7 @@ services:
         #     context: .
         depends_on:
             - gost
+            - gost-db
         volumes:
             - ./src:/home/app
         working_dir: /home/app
