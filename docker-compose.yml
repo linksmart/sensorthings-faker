@@ -32,12 +32,22 @@ services:
         environment:
             gost_db_host: gost-db
             gost_mqtt_host: mosquitto
+            GOST_SERVER_MAX_ENTITIES: 1000
     dashboard:
         image: geodan/gost-dashboard:0.5
         ports:
           - "8090:8080"
         depends_on:
             - gost
+    dummy-stream:
+        image: ogc/datafaker
+        depends_on:
+            - gost
+        # tty: true
+        volumes:
+            - ./src:/home/app
+        working_dir: /home/app
+        command: python faker.py
 volumes:
     postgis: {}
     nodered: {}

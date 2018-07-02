@@ -1,0 +1,182 @@
+[
+    {
+        "name": "Schloss Birlingshoven",
+        "description": "Schloss Birlingshoven",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.748482,
+                7.200086
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 1",
+        "description": "Checkpoint 1",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.748819,
+                7.202805
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 2",
+        "description": "Checkpoint 2",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.748432,
+                7.199049
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 3",
+        "description": "Checkpoint 3",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.749342,
+                7.196345
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 4",
+        "description": "Checkpoint 4",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.749614,
+                7.194993
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 5",
+        "description": "Checkpoint 5",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.750809,
+                7.190117
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 6",
+        "description": "Checkpoint 6",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.751488,
+                7.187118
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 7",
+        "description": "Checkpoint 7",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.751488,
+                7.187118
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 8",
+        "description": "Checkpoint 8",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.752194,
+                7.18435
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 9",
+        "description": "Checkpoint 9",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.753796,
+                7.179989
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 10",
+        "description": "Checkpoint 10",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.754868,
+                7.177784
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 11",
+        "description": "Checkpoint 11",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.756144,
+                7.175794
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 12",
+        "description": "Checkpoint 12",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.756667,
+                7.173573
+            ]
+        }
+    },
+    {
+        "name": "Checkpoint 13",
+        "description": "Checkpoint 13",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.757488,
+                7.17073
+            ]
+        }
+    },
+    {
+        "name": "Hangelor Ost",
+        "description": "Hangelor Ost",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                50.749342,
+                7.196345
+            ]
+        }
+    }
+]
