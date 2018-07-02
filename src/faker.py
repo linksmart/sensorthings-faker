@@ -64,7 +64,7 @@ class Faker:
         return True if (count >= 1) else False
 
     def create_thing(self):
-
+        print "creating a thing"
         thing = {
           "name": "Vehicle " + self.random_string(),
           "description": "Local shuttle",
@@ -76,10 +76,11 @@ class Faker:
         return requests.post('http://gost:8080/v1.0/Things',headers=self.headers,json=thing)
 
     def create_sensor(self,sensor):
+        print "creating a sensor"
         return requests.post('http://gost:8080/v1.0/Sensors',headers=self.headers,json=sensor)
 
     def create_observed_property(self):
-
+        print "creating an observed property"
         observed_property = {
           "name": "Demo observed property" + self.random_string(),
           "description": "Demo observed property",
@@ -89,6 +90,7 @@ class Faker:
         return requests.post('http://gost:8080/v1.0/ObservedProperties',headers=self.headers,json=observed_property)
 
     def create_datastream(self,datastream):
+        print "creating data stream"
         return requests.post('http://gost:8080/v1.0/Datastreams',headers=self.headers,json=datastream)
 
     def random_string(self):
@@ -102,6 +104,8 @@ class Faker:
           "result" : result,
           "Datastream":{"@iot.id":datastream_id}
         }
+        print "creating an observation"
+        print observation
         return requests.post('http://gost:8080/v1.0/Observations',headers=self.headers,json=observation)
 
     def update_thing(self,thing_id,location_id):
@@ -110,6 +114,8 @@ class Faker:
             {"@iot.id":location_id}
           ]
         }
+        print "updating a thing location"
+        print thing
         return requests.patch('http://gost:8080/v1.0/Things('+str(thing_id)+')',headers=self.headers,json=thing)
 
 
@@ -117,7 +123,6 @@ class Faker:
 
         # create a thing
         thing =  self.create_thing()
-        print thing.text
         thing_id = thing.json()['@iot.id']
 
         # create a temperature sensor
