@@ -1,25 +1,23 @@
 version: '2'
 services:
     gost-db:
-        image: geodan/gost-db:0.5
+        image: geodan/gost-db
         environment:
-            POSTGRES_DB: gost
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-        ports:
-            - "5432:5432"
+            - POSTGRES_DB=gost
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
     gost:
-        image: geodan/gost:0.5
+        image: geodan/gost
         depends_on:
             - gost-db
         ports:
             - "8095:8080"
         environment:
-            gost_db_host: gost-db
-            GOST_SERVER_MAX_ENTITIES: 1000
-            GOST_SERVER_EXTERNAL_URI: http://localhost:8095
+            - GOST_DB_HOST=gost-db
+            - GOST_SERVER_MAX_ENTITIES=1000
+            - GOST_MQTT_ENABLED=false
     dashboard:
-        image: geodan/gost-dashboard:0.5
+        image: geodan/gost-dashboard
         ports:
           - "8090:8080"
         depends_on:
