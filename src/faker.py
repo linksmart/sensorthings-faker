@@ -39,6 +39,7 @@ class Faker:
                     response = requests.post(self.rooturl+'/Locations',headers=headers,json=location)
                     self.location_id = response.json()['@iot.id']
                     self.all_location_ids.append(self.location_id)
+                    print("create_locations {}").format(location)
 
         print "creating locations finished"
 
@@ -74,9 +75,8 @@ class Faker:
         if thing is not None:
             return thing
 
-        thing = requests.post(self.rooturl+'/Things',headers=self.headers,json=thing_data).json()
-
-        return thing
+        print("create_thing {}").format(thing_data)
+        return requests.post(self.rooturl+'/Things',headers=self.headers,json=thing_data).json()
 
     def has_sensor(self,sensor_name):
 
@@ -92,9 +92,8 @@ class Faker:
         if sensor is not None:
             return sensor
 
-        sensor = requests.post(self.rooturl+'/Sensors',headers=self.headers,json=sensor_data).json()
-
-        return sensor
+        print("create_sensor {}").format(sensor_data)
+        return requests.post(self.rooturl+'/Sensors',headers=self.headers,json=sensor_data).json()
 
     def has_observed_property(self,observed_property_name):
 
@@ -110,9 +109,8 @@ class Faker:
         if observed_property is not None:
             return observed_property
 
-        observed_property = requests.post(self.rooturl+'/ObservedProperties',headers=self.headers,json=observed_property_data).json()
-
-        return observed_property
+        print("create_observed_property {}").format(observed_property_data)
+        return requests.post(self.rooturl+'/ObservedProperties',headers=self.headers,json=observed_property_data).json()
 
     def has_datastream(self,thing_id,datastream_name):
 
@@ -131,9 +129,8 @@ class Faker:
         if datastream is not None:
             return datastream
 
-        datastream = requests.post(self.rooturl+'/Datastreams',headers=self.headers,json=datastream_data).json()
-
-        return datastream
+        print("create_datastream {}").format(datastream_data)
+        return requests.post(self.rooturl+'/Datastreams',headers=self.headers,json=datastream_data).json()
 
     def random_string(self):
         return ('%06x' % random.randrange(16**6)).upper()
@@ -146,6 +143,8 @@ class Faker:
           "result" : result,
           "Datastream":{"@iot.id":datastream_id}
         }
+        
+        print("create_observation {}").format(observation)
         return requests.post(self.rooturl+'/Observations',headers=self.headers,json=observation)
 
     def update_thing(self,thing_id,location_id):
