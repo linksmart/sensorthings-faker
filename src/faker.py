@@ -4,6 +4,7 @@
 import requests
 import json
 import random
+import socket
 from time import sleep
 from datetime import datetime
 
@@ -269,7 +270,7 @@ while True:
         break
     else:
         print("gost-db port is not open! I'll check it soon!")
-        time.sleep(3)
+        sleep(3)
         
 faker = Faker()
 faker.create_locations()
