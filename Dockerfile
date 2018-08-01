@@ -1,3 +1,9 @@
 FROM python:2-alpine3.6
-COPY requirements.txt /
-RUN pip install -r /requirements.txt
+
+RUN pip install requests==2.18.4
+
+COPY src /home/app
+WORKDIR /home/app
+
+ENTRYPOINT [ "python", "-u" ]
+CMD [ "faker.py" ]
