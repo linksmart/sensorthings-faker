@@ -5,8 +5,19 @@ import requests
 import json
 import random
 import socket
+import os
 from time import sleep
 from datetime import datetime
+
+GOST = os.environ.get('GOST')
+GOSTDB = os.environ.get('GOSTDB')
+GOSTDB_PORT = os.environ.get('GOSTDB_PORT')
+print("GOST: {}").format(GOST)
+print("POSTGRES HOST: {} PORT: {}").format(GOSTDB, GOSTDB_PORT)
+if GOST==None or GOSTDB==None or GOSTDB_PORT==None:
+    print("Environment variables are not set.")
+    os._exit(1)
+
 
 class Faker:
     def __init__(self):
@@ -18,7 +29,7 @@ class Faker:
         self.max_speed = 60
         self.all_location_ids = []
         self.delay = 10
-        self.rooturl = "http://gost:8080/v1.0"
+        self.rooturl = GOST
         print "init"
 
     def create_location(self,data):
@@ -263,12 +274,12 @@ class Faker:
 # Infinite loop
 while True:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = sock.connect_ex(("gost-db", 5432))
+    result = sock.connect_ex((GOSTDB, int(GOSTDB_PORT)))
     if result == 0:
-        print("gost-db port is open! Bye!")
+        print("postgres port is open!")
         break
     else:
-        print("gost-db port is not open! I'll check it soon!")
+        print("postgres port is not open! Will retry in 3s.")
         sleep(3)
         
 faker = Faker()

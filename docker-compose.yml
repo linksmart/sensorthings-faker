@@ -25,6 +25,10 @@ services:
         #     context: .
         depends_on:
             - gost
+        environment:
+            - GOST=http://gost:8080/v1.0
+            - GOSTDB=postgres
+            - GOSTDB_PORT=5432
         # volumes:
         #     - ./src:/home/app
 
