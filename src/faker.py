@@ -74,8 +74,8 @@ class Faker:
     def create_thing(self):
 
         thing_data = {
-          "name": "new vehicle",
-          "description": "Local shuttle",
+          "name": "Fraunhofer FIT Shuttle Bus",
+          "description": "Simulated shuttle bus",
           "Locations": [
             {"@iot.id":self.location_id}
           ]
