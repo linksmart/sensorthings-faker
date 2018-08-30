@@ -9,6 +9,7 @@ services:
         command: ["-c", "shared_buffers=256MB", "-c", "max_connections=200"]
         volumes:
             - postgres:/var/lib/postgresql/data
+        restart: unless-stopped
     gost:
         image: geodan/gost
         depends_on:
@@ -19,12 +20,7 @@ services:
             - GOST_DB_HOST=postgres
             - GOST_SERVER_MAX_ENTITIES=10000
             - GOST_MQTT_ENABLED=false
-            - GOST_LOG_VERBOSE_FLAG=true
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "10m"
-                max-file: "10"
+        restart: unless-stopped
     faker:
         image: docker.linksmart.eu/ogc-st/faker
         # build:
@@ -37,6 +33,7 @@ services:
             - GOSTDB_PORT=5432
         # volumes:
         #     - ./src:/home/app
+        restart: unless-stopped
 
 volumes:
     postgres: {}
