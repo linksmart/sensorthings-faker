@@ -16,19 +16,21 @@ services:
         ports:
             - "8095:8080"
         environment:
+            - GOST_SERVER_EXTERNAL_URI=http://localhost:8095/
             - GOST_DB_HOST=postgres
             - GOST_SERVER_MAX_ENTITIES=10000
             - GOST_MQTT_ENABLED=false
     faker:
         image: docker.linksmart.eu/ogc-st/faker
-        # build:
-        #     context: .
         depends_on:
             - gost
         environment:
             - GOST=http://gost:8080/v1.0
             - GOSTDB=postgres
             - GOSTDB_PORT=5432
+        ## DEV:
+        # build:
+        #     context: .
         # volumes:
         #     - ./src:/home/app
 
