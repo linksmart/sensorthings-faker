@@ -1,7 +1,7 @@
 [
     {
-        "name": "Schloss Birlingshoven",
-        "description": "Schloss Birlingshoven",
+        "name": "Schloss Birlinghoven",
+        "description": "Schloss Birlinghoven",
         "encodingType": "application/vnd.geo+json",
         "location": {
             "type": "Point",
@@ -168,8 +168,8 @@
         }
     },
     {
-        "name": "Hangelor Ost",
-        "description": "Hangelor Ost",
+        "name": "Hangelar Ost",
+        "description": "Hangelar Ost",
         "encodingType": "application/vnd.geo+json",
         "location": {
             "type": "Point",
