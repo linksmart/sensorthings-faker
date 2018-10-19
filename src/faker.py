@@ -27,6 +27,8 @@ class Faker:
         self.max_temp = 30
         self.min_speed = 10
         self.max_speed = 60
+        self.min_people = 0
+        self.max_people = 10
         self.all_location_ids = []
         self.delay = 10
         self.rooturl = GOST
@@ -166,6 +168,11 @@ class Faker:
         }
         return requests.patch(self.rooturl+'/Things('+str(thing_id)+')',headers=self.headers,json=thing)
 
+    def create_people_observation(self,people_datastream_id):               
+        front = random.randint(self.min_people,self.max_people)
+        rear = random.randint(self.min_people,self.max_people)
+        self.create_observation(people_datastream_id,{"front": front, "rear": rear})
+
 
     def seed_observations(self):
 
@@ -188,7 +195,6 @@ class Faker:
           "description": "Temperature DS observed property",
           "definition": "Demo definition"
         }
-
         temperature_observed_property_id = self.create_observed_property(temperature_observed_property)['@iot.id']
 
         #create datastream for temperature sensor
@@ -205,7 +211,6 @@ class Faker:
           "ObservedProperty":{"@iot.id":temperature_observed_property_id},
           "Sensor":{"@iot.id":temperature_sensor_id}
         }
-
         temperature_datastream_id = self.create_datastream(temperature_datastream)['@iot.id']
 
         # create a Speedometer sensor
@@ -239,14 +244,44 @@ class Faker:
           "ObservedProperty":{"@iot.id":speed_observed_property_id},
           "Sensor":{"@iot.id":speed_sensor_id}
         }
-
         speedometer_datastream_id = self.create_datastream(speed_datastream)['@iot.id']
+
+        # create a people-counter sensor
+        people_sensor = {
+          "name": "PeopleCounter",
+          "description": "Measures the number of people traversing an entrance",
+          "encodingType": "application/pdf",
+          "metadata": "demo"
+        }
+        people_sensor_id = self.create_sensor(people_sensor)['@iot.id']
+
+        # create an observed property for people-counter reading
+        people_observed_property = {
+          "name": "People Counter DS observed property",
+          "description": "People Counter DS observed property",
+          "definition": "Demo definition"
+        }
+        people_observed_property_id = self.create_observed_property(people_observed_property)['@iot.id']
+
+        # create datastream for people-counter sensor
+        people_datastream = {
+          "name": "People Counter DS",
+          "description": "Datastream for recording number of people traversing from each entrance",
+          "observationType": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation",
+          "unitOfMeasurement": None,
+          "Thing":{"@iot.id":thing_id},
+          "ObservedProperty":{"@iot.id":people_observed_property_id},
+          "Sensor":{"@iot.id":people_sensor_id}
+        }
+        people_datastream_id = self.create_datastream(people_datastream)['@iot.id']
 
         sensor_flag = True
         location_count = len(self.all_location_ids)
         forward_direction = True
         current_location = 0
 
+        # create observations
+        self.create_people_observation(people_datastream_id)
         while True:
             if sensor_flag is True:
                 temperature_value = round(random.uniform(self.min_temp,self.max_temp),2)
@@ -263,12 +298,15 @@ class Faker:
                 if current_location == location_count:
                     forward_direction = False
                     current_location -= 2
+                    self.create_people_observation(people_datastream_id)
+
             else:
                 self.update_thing(thing_id,self.all_location_ids[current_location])
                 current_location -= 1
                 if current_location == -1:
                     forward_direction = True
                     current_location += 2
+                    self.create_people_observation(people_datastream_id)
             sleep(self.delay)
 
 # Infinite loop
