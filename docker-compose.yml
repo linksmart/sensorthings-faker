@@ -19,6 +19,7 @@ services:
         environment:
             - GOST_SERVER_EXTERNAL_URI=http://localhost:8095/
             - GOST_DB_HOST=postgres
+            - GOST_SERVER_MAX_ENTITIES=100
             - GOST_MQTT_ENABLED=false
         restart: unless-stopped
     faker:
