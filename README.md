@@ -10,6 +10,8 @@ docker-compose up -d
 ```
 2. Wait several minutes to have some data to work with. You should be able to fetch observations from: http://localhost:8095/v1.0/Observations
 
+The server root URL is: http://localhost:8095/v1.0
+
 #### Visualize in Grafana using the latest [SensorThings](https://code.linksmart.eu/projects/OGC-ST/repos/grafana-sensorthings-datasource) plugin
 1. Clone the plugin source code
 ```
