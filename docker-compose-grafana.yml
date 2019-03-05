@@ -1,0 +1,19 @@
+version: '2.2'
+services:
+    grafana:
+        image: grafana/grafana:6.0.0
+        environment:
+            - GF_INSTALL_PLUGINS=grafana-worldmap-panel
+        ports:
+            - 3000:3000
+        volumes:
+            - grafana:/var/lib/grafana
+            - ./linksmart-sensorthings-datasource:/var/lib/grafana/plugins/linksmart-sensorthings-datasource       
+
+volumes:
+    grafana: {}
+
+networks:
+    default:
+        external: true
+        name: sensorthings
