@@ -23,7 +23,7 @@ services:
             - GOST_MQTT_ENABLED=false
         restart: unless-stopped
     faker:
-        image: docker.linksmart.eu/ogc-st/faker
+        image: linksmart/sensorthings-faker
         depends_on:
             - gost
         environment:

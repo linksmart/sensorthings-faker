@@ -17,13 +17,23 @@ The server root URL is: http://localhost:8095/v1.0
 #### Visualize in Grafana using the latest [SensorThings](https://github.com/linksmart/grafana-sensorthings-datasource) plugin
 1. Clone the plugin source code
 ```
-git clone https://github.com/linksmart/sensorthings-faker/blob/master/docker-compose-grafana.yml linksmart-sensorthings-datasource
+git clone https://github.com/linksmart/grafana-sensorthings-datasource.git linksmart-sensorthings-datasource
 ```
 2. Start Grafana with Worldmap Panel
 ```
 docker-compose -f docker-compose-grafana.yml up -d
 ```
-3. Configure SensorThings plugin with:
+Open Grafana: http://localhost:3000 (default user: `admin`, password: `admin`).
+3. Add SensorThings datasource, configure with:
    - URL: `http://gost:8080/v1.0`
    - Access: server
-4. Continue with the [plugin](https://github.com/linksmart/grafana-sensorthings-datasource/blob/master/README.md)
+4. Continue with the [plugin](https://github.com/linksmart/grafana-sensorthings-datasource/blob/master/README.md).
+
+Tip: `People Counter DS` has `OM_Observation` type and with `result` of the following format:
+```
+{
+    "rear": 6,
+    "front": 2
+}
+```
+These can be visualized with JSONPath using `$.front` and `$.rear` expressions.

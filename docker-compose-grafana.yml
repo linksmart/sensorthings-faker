@@ -1,7 +1,7 @@
 version: '2.2'
 services:
     grafana:
-        image: grafana/grafana:6.0.0
+        image: grafana/grafana
         environment:
             - GF_INSTALL_PLUGINS=grafana-worldmap-panel
         ports:
