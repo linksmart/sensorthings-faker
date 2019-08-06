@@ -15,12 +15,13 @@ docker-compose up -d
 The server root URL is: http://localhost:8095/v1.0
 
 #### Visualize in Grafana using the latest [SensorThings](https://github.com/linksmart/grafana-sensorthings-datasource) plugin
-1. Clone the plugin source code
+1. Clone the plugin source code:
 ```
 git clone https://github.com/linksmart/grafana-sensorthings-datasource.git linksmart-sensorthings-datasource
 ```
-2. Start Grafana with Worldmap Panel
+2. Start a Grafana instance with Worldmap Panel and the cloned Sensorthings Datasource as a mounted volume:
 ```
+wget https://raw.githubusercontent.com/linksmart/sensorthings-faker/master/docker-compose-grafana.yml
 docker-compose -f docker-compose-grafana.yml up -d
 ```
 Open Grafana: http://localhost:3000 (default user: `admin`, password: `admin`).
