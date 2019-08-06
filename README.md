@@ -7,7 +7,7 @@ This application starts a [GOST](https://github.com/gost/server) OGC SensorThing
 
 1. Download the docker-compose script and start all containers:
 ```
-wget https://github.com/linksmart/sensorthings-faker/blob/master/docker-compose.yml
+wget https://raw.githubusercontent.com/linksmart/sensorthings-faker/master/docker-compose.yml
 docker-compose up -d
 ```
 2. Wait several minutes to have some data to work with. You should be able to fetch observations from: http://localhost:8095/v1.0/Observations
