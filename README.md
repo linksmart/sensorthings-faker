@@ -15,20 +15,19 @@ docker-compose up -d
 The server root URL is: http://localhost:8095/v1.0
 
 #### Visualize in Grafana using the latest [SensorThings](https://github.com/linksmart/grafana-sensorthings-datasource) plugin
-1. Clone the plugin source code:
-```
-git clone https://github.com/linksmart/grafana-sensorthings-datasource.git linksmart-sensorthings-datasource
-```
-2. Start a Grafana instance with Worldmap Panel and the cloned Sensorthings Datasource as a mounted volume:
+1. Start the latest Grafana instance with Worldmap Panel and latest build of Sensorthings Datasource:
 ```
 wget https://raw.githubusercontent.com/linksmart/sensorthings-faker/master/docker-compose-grafana.yml
 docker-compose -f docker-compose-grafana.yml up -d
 ```
+
 Open Grafana: http://localhost:3000 (default user: `admin`, password: `admin`).
-3. Add SensorThings datasource, configure with:
+
+2. Add SensorThings datasource, configure with:
    - URL: `http://gost:8080/v1.0`
    - Access: server
-4. Continue with the [plugin](https://github.com/linksmart/grafana-sensorthings-datasource/blob/master/README.md).
+
+3. Continue with the [plugin](https://github.com/linksmart/grafana-sensorthings-datasource/blob/master/README.md).
 
 Tip: `People Counter DS` has `OM_Observation` type and with `result` of the following format:
 ```
