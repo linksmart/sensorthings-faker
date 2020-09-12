@@ -3,7 +3,7 @@ services:
     grafana:
         image: grafana/grafana
         environment:
-            - GF_INSTALL_PLUGINS=grafana-worldmap-panel,"https://github.com/linksmart/grafana-sensorthings-datasource/archive/master.zip;sensorthings-master"
+            - GF_INSTALL_PLUGINS=grafana-worldmap-panel,https://github.com/linksmart/grafana-sensorthings-datasource/archive/master.zip;linksmart-sensorthings-datasource
         ports:
             - 3000:3000
         volumes:
