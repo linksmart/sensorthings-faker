@@ -1,0 +1,110 @@
+[
+    {
+        "name": "Pforte",
+        "description": "Pforte",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                7.200829,
+                50.748649
+            ]
+        }
+    },
+    {
+        "name": "Building C1",
+        "description": "Building C1",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                7.201808,
+                50.748694
+            ]
+        }
+    },
+    {
+        "name": "Building C2",
+        "description": "Building C2",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                7.202334,
+                50.748769
+            ]
+        }
+    },
+    {
+        "name": "Building C3",
+        "description": "Building C3",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                7.202833,
+                50.748835
+            ]
+        }
+    },
+    {
+        "name": "Building C4",
+        "description": "Building C4",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                7.203713,
+                50.748954
+            ]
+        }
+    },
+    {
+        "name": "Kreuzung",
+        "description": "Krezung",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                7.204378,
+                50.749085
+            ]
+        }
+    },
+    {
+        "name": "Schloss",
+        "description": "Schloss",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                7.205405,
+                50.749181
+            ]
+        }
+    },
+    {
+        "name": "Building D13",
+        "description": "Building D13",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                7.205727,
+                50.749655
+            ]
+        }
+    },
+    {
+        "name": "Mensa",
+        "description": "Mensa",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                7.204785,
+                50.750035
+            ]
+        }
+    }
+]
