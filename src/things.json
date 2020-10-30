@@ -1,0 +1,11 @@
+[
+    {
+        "name": "Fraunhofer FIT Shuttle Bus",
+        "description": "Simulated shuttle bus",
+        "Locations": [
+            {
+                "@iot.id": 0
+            }
+        ]
+    }
+]

@@ -12,8 +12,8 @@ from datetime import datetime
 GOST = os.environ.get('GOST')
 GOSTDB = os.environ.get('GOSTDB')
 GOSTDB_PORT = os.environ.get('GOSTDB_PORT')
-print("GOST: {}").format(GOST)
-print("POSTGRES HOST: {} PORT: {}").format(GOSTDB, GOSTDB_PORT)
+print("GOST: {}".format(GOST))
+print("POSTGRES HOST: {} PORT: {}".format(GOSTDB, GOSTDB_PORT))
 if GOST==None or GOSTDB==None or GOSTDB_PORT==None:
     print("Environment variables are not set.")
     os._exit(1)
@@ -32,7 +32,7 @@ class Faker:
         self.all_location_ids = []
         self.delay = 10
         self.rooturl = GOST
-        print "init"
+        print("init")
 
     def create_location(self,data):
         headers = {'Content-type': 'application/json; charset=utf-8'}
@@ -41,10 +41,10 @@ class Faker:
     def delete_location(self,location_id):
         response = requests.delete(self.rooturl+'/Locations('+location_id+')')
 
-    def create_locations(self):
-        print "creating locations started"
+    def create_locations(self, filename):
+        print("creating locations started. Source file: {}").format(filename)
 
-        with open('locations.json') as data_file:
+        with open(filename) as data_file:
             locations = json.load(data_file)
             for location in locations:
                 if not self.has_location(location['name']):
@@ -54,7 +54,7 @@ class Faker:
                     self.all_location_ids.append(self.location_id)
                     print("create_locations {}").format(location)
 
-        print "creating locations finished"
+        print("creating locations finished")
 
     def has_location(self,location_name):
         response = requests.get(self.rooturl+"/Locations?$filter=name eq '" + location_name + "'")
@@ -73,22 +73,16 @@ class Faker:
         count = len(response_things)
         return response_things[0] if (count >= 1) else None
 
-    def create_thing(self):
-
-        thing_data = {
-          "name": "Fraunhofer FIT Shuttle Bus",
-          "description": "Simulated shuttle bus",
-          "Locations": [
-            {"@iot.id":self.location_id}
-          ]
-        }
-
+    def create_thing(self, filename, index):
+      with open(filename) as data_file:
+        thing_data = json.load(data_file)[index]
+        
         thing = self.has_thing(thing_data['name'])
 
         if thing is not None:
-            return thing
+          return thing
 
-        print("create_thing {}").format(thing_data)
+        print("create_thing {}".format(thing_data))
         return requests.post(self.rooturl+'/Things',headers=self.headers,json=thing_data).json()
 
     def has_sensor(self,sensor_name):
@@ -105,7 +99,7 @@ class Faker:
         if sensor is not None:
             return sensor
 
-        print("create_sensor {}").format(sensor_data)
+        print("create_sensor {}".format(sensor_data))
         return requests.post(self.rooturl+'/Sensors',headers=self.headers,json=sensor_data).json()
 
     def has_observed_property(self,observed_property_name):
@@ -122,7 +116,7 @@ class Faker:
         if observed_property is not None:
             return observed_property
 
-        print("create_observed_property {}").format(observed_property_data)
+        print("create_observed_property {}".format(observed_property_data))
         return requests.post(self.rooturl+'/ObservedProperties',headers=self.headers,json=observed_property_data).json()
 
     def has_datastream(self,thing_id,datastream_name):
@@ -142,14 +136,16 @@ class Faker:
         if datastream is not None:
             return datastream
 
-        print("create_datastream {}").format(datastream_data)
+        print("create_datastream {}".format(datastream_data))
         return requests.post(self.rooturl+'/Datastreams',headers=self.headers,json=datastream_data).json()
 
     def random_string(self):
         return ('%06x' % random.randrange(16**6)).upper()
+    
+    def current_time(self):
+      return datetime.now().isoformat()[:-3] + 'Z'
 
-    def create_observation(self,datastream_id,result):
-        timestamp = datetime.now().isoformat()[:-3] + 'Z'
+    def create_observation(self,datastream_id,result,timestamp):
         observation = {
           "phenomenonTime": timestamp,
           "resultTime" : timestamp,
@@ -157,7 +153,7 @@ class Faker:
           "Datastream":{"@iot.id":datastream_id}
         }
         
-        print("create_observation {}").format(observation)
+        print("create_observation {}".format(observation))
         return requests.post(self.rooturl+'/Observations',headers=self.headers,json=observation)
 
     def update_thing(self,thing_id,location_id):
@@ -166,18 +162,17 @@ class Faker:
             {"@iot.id":location_id}
           ]
         }
+        print("update_thing {}".format(thing))
         return requests.patch(self.rooturl+'/Things('+str(thing_id)+')',headers=self.headers,json=thing)
 
-    def create_people_observation(self,people_datastream_id):               
+    def create_people_observation(self,people_datastream_id,timestamp):               
         front = random.randint(self.min_people,self.max_people)
         rear = random.randint(self.min_people,self.max_people)
-        self.create_observation(people_datastream_id,{"front": front, "rear": rear})
+        self.create_observation(people_datastream_id,{"front": front, "rear": rear},timestamp)
 
 
-    def seed_observations(self):
+    def seed_data(self, thing):
 
-        # create a thing
-        thing =  self.create_thing()
         thing_id = thing['@iot.id']
 
         # create a temperature sensor
@@ -275,39 +270,46 @@ class Faker:
         }
         people_datastream_id = self.create_datastream(people_datastream)['@iot.id']
 
-        sensor_flag = True
         location_count = len(self.all_location_ids)
         forward_direction = True
         current_location = 0
 
         # create observations
-        self.create_people_observation(people_datastream_id)
+        i = 0
         while True:
-            if sensor_flag is True:
-                temperature_value = round(random.uniform(self.min_temp,self.max_temp),2)
-                self.create_observation(temperature_datastream_id,temperature_value)
-                sensor_flag = False
-            else:
-                speed_value = random.randint(self.min_speed,self.max_speed)
-                self.create_observation(speedometer_datastream_id,speed_value)
-                sensor_flag = True
+            timestamp = self.current_time()
 
+            # if i==0:
+            #   self.create_people_observation(people_datastream_id,timestamp)
+
+            if i%3==0:
+              # add temperature observation
+              temperature_value = round(random.uniform(self.min_temp,self.max_temp),2)
+              self.create_observation(temperature_datastream_id,temperature_value,timestamp)
+
+            # add speed observation
+            speed_value = random.randint(self.min_speed,self.max_speed)
+            self.create_observation(speedometer_datastream_id,speed_value,timestamp)  
+
+            # change location
             if forward_direction is True:
                 self.update_thing(thing_id,self.all_location_ids[current_location])
                 current_location += 1
                 if current_location == location_count:
                     forward_direction = False
                     current_location -= 2
-                    self.create_people_observation(people_datastream_id)
-
+                    # add people observation
+                    self.create_people_observation(people_datastream_id,timestamp)
             else:
                 self.update_thing(thing_id,self.all_location_ids[current_location])
                 current_location -= 1
                 if current_location == -1:
                     forward_direction = True
                     current_location += 2
-                    self.create_people_observation(people_datastream_id)
+                    # add people observation
+                    self.create_people_observation(people_datastream_id,timestamp)
             sleep(self.delay)
+            i+=1
 
 # Infinite loop
 while True:
@@ -321,5 +323,5 @@ while True:
         sleep(3)
         
 faker = Faker()
-faker.create_locations()
-faker.seed_observations()
+faker.create_locations('locations.json')
+faker.seed_data(faker.create_thing('things.json', index=0))
