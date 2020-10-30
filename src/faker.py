@@ -6,6 +6,7 @@ import json
 import random
 import socket
 import os
+import threading
 from time import sleep
 from datetime import datetime
 
@@ -30,7 +31,6 @@ class Faker:
         self.min_people = 0
         self.max_people = 10
         self.all_location_ids = []
-        self.delay = 10
         self.rooturl = GOST
         print("init")
 
@@ -171,9 +171,10 @@ class Faker:
         self.create_observation(people_datastream_id,{"front": front, "rear": rear},timestamp)
 
 
-    def seed_data(self, thing):
+    def seed_data(self, thing, delay):
 
         thing_id = thing['@iot.id']
+        thing_name = thing['name']
 
         # create a temperature sensor
         temperature_sensor = {
@@ -278,6 +279,7 @@ class Faker:
         i = 0
         while True:
             timestamp = self.current_time()
+            print("Thing({}): {} @ {}".format(thing_id, thing_name, timestamp))
 
             # if i==0:
             #   self.create_people_observation(people_datastream_id,timestamp)
@@ -308,7 +310,7 @@ class Faker:
                     current_location += 2
                     # add people observation
                     self.create_people_observation(people_datastream_id,timestamp)
-            sleep(self.delay)
+            sleep(delay)
             i+=1
 
 # Infinite loop
@@ -321,7 +323,13 @@ while True:
     else:
         print("postgres port is not open! Will retry in 3s.")
         sleep(3)
-        
+
+
 faker = Faker()
 faker.create_locations('locations.json')
-faker.seed_data(faker.create_thing('things.json', index=0))
+
+thing_0 = faker.create_thing('things.json', index=0)
+thing_1 = faker.create_thing('things.json', index=1)
+
+threading.Thread(target=faker.seed_data, args=(thing_0,10,)).start()
+threading.Thread(target=faker.seed_data, args=(thing_1,7,)).start()

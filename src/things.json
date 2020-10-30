@@ -3,9 +3,14 @@
         "name": "Fraunhofer FIT Shuttle Bus",
         "description": "Simulated shuttle bus",
         "Locations": [
-            {
-                "@iot.id": 0
-            }
+          {"@iot.id": 1}
         ]
-    }
+      },
+      {
+        "name": "Fraunhofer FIT Express",
+        "description": "Simulated fast shuttle bus",
+        "Locations": [
+          {"@iot.id": 1}
+        ]
+      }
 ]
