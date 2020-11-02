@@ -30,6 +30,7 @@ class Faker:
         self.max_speed = 60
         self.min_people = 0
         self.max_people = 10
+        self.delay = 20
         self.all_location_ids = []
         self.rooturl = GOST
         print("init")
@@ -73,9 +74,22 @@ class Faker:
         count = len(response_things)
         return response_things[0] if (count >= 1) else None
 
-    def create_thing(self, filename, index):
+    def create_thing(self, filename, name):
       with open(filename) as data_file:
-        thing_data = json.load(data_file)[index]
+        things_data = json.load(data_file)
+        print(things_data)
+        
+        for thing_data in things_data:
+            # print("name {}".format(thing_data))
+            if thing_data['name'] == name:
+                print("Found: {}".format(name))
+                break
+        else: 
+            thing_data = None
+
+        if thing_data is None:
+            print("Could not find {} in {}".format(name,filename))
+            return
         
         thing = self.has_thing(thing_data['name'])
 
@@ -171,7 +185,7 @@ class Faker:
         self.create_observation(people_datastream_id,{"front": front, "rear": rear},timestamp)
 
 
-    def seed_data(self, thing, delay):
+    def seed_data(self, thing, fast):
 
         thing_id = thing['@iot.id']
         thing_name = thing['name']
@@ -290,7 +304,7 @@ class Faker:
               self.create_observation(temperature_datastream_id,temperature_value,timestamp)
 
             # add speed observation
-            speed_value = random.randint(self.min_speed,self.max_speed)
+            speed_value = random.randint(self.min_speed*2 if fast else self.min_speed,self.max_speed*2 if fast else self.max_speed)
             self.create_observation(speedometer_datastream_id,speed_value,timestamp)  
 
             # change location
@@ -310,10 +324,10 @@ class Faker:
                     current_location += 2
                     # add people observation
                     self.create_people_observation(people_datastream_id,timestamp)
-            sleep(delay)
+            sleep(self.delay/2 if fast else self.delay)
             i+=1
 
-# Infinite loop
+# wait for the server
 while True:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex((GOSTDB, int(GOSTDB_PORT)))
@@ -328,8 +342,8 @@ while True:
 faker = Faker()
 faker.create_locations('locations.json')
 
-thing_0 = faker.create_thing('things.json', index=0)
-thing_1 = faker.create_thing('things.json', index=1)
+thing_0 = faker.create_thing('things.json', name="Fraunhofer FIT Shuttle Bus")
+thing_1 = faker.create_thing('things.json', name="Fraunhofer FIT Express")
 
-threading.Thread(target=faker.seed_data, args=(thing_0,10,)).start()
-threading.Thread(target=faker.seed_data, args=(thing_1,7,)).start()
+threading.Thread(target=faker.seed_data, args=(thing_0,False,)).start()
+threading.Thread(target=faker.seed_data, args=(thing_1,True,)).start()
