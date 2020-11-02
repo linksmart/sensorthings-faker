@@ -1,4 +1,4 @@
-FROM python:2-alpine3.6
+FROM python:3-alpine3.6
 
 RUN pip install requests==2.18.4
 
