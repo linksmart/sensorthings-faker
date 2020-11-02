@@ -43,7 +43,7 @@ class Faker:
         response = requests.delete(self.rooturl+'/Locations('+location_id+')')
 
     def create_locations(self, filename):
-        print("creating locations started. Source file: {}").format(filename)
+        print("creating locations started. Source file: {}".format(filename))
 
         with open(filename) as data_file:
             locations = json.load(data_file)
@@ -53,7 +53,7 @@ class Faker:
                     response = requests.post(self.rooturl+'/Locations',headers=headers,json=location)
                     self.location_id = response.json()['@iot.id']
                     self.all_location_ids.append(self.location_id)
-                    print("create_locations {}").format(location)
+                    print("create_locations {}".format(location))
 
         print("creating locations finished")
 
